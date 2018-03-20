@@ -1,0 +1,32 @@
+.thead-blue{
+	color: #fff;
+	background-color: #007bff;
+}
+.ani-img{
+	padding-top: 55%;
+	margin: 5px;
+	height: 370px;
+	width: 260px;
+}
+#ani-containter{
+	margin: 0px !important;
+	padding: 0px !important;
+	min-width: 100% !important;
+}
+.ika-p{
+	min-height: 80px;
+	background-color: rgba(0,0,0,0.7);
+	color: white;
+	text-align: center;
+	font-size: 20px;
+}
+body{
+}
+#btn-primary{
+	border-color: #008FFF;
+	color: #008FFF;
+}
+#btn-primary:hover {
+	background-color: #008FFF;
+	color: white;
+}
