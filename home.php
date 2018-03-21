@@ -20,7 +20,7 @@
 								<a class="nav-link" href="#">Inicio <span class="sr-only">(current)</span></a>
 						</li>
 						<li class="nav-item">
-							 <a id="btn-close-sesion" class="nav-link" href="#"><i class="fas fa-cloud-download-alt"></i> Descargar</a>
+							 <a id="btn-download" class="nav-link" href="#"><i class="fas fa-cloud-download-alt"></i> Descargar</a>
 						</li>
 						<li class="nav-item">
 							 <a id="btn-close-sesion" class="nav-link" href="#"> <i class="fas fa-upload"></i> Actualizar</a>
@@ -133,5 +133,8 @@
 			function view_anime(code){
 			location.href = '/list_anime.php?code='+code;
 			}
+      $( '#btn-download' ).click(function(){
+        location.href = '/view.php';
+      });
 			 	</script>
 </html>

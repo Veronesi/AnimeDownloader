@@ -152,7 +152,8 @@ class Main{
         foreach ($this->Lista as $key) {
             preg_match("/(\d+)_\d+\.\w+/", $key->Capitulos[0],$M); 
             if($M[1] == $code){
-                $dom = file_get_contents('http://animeflv.net/anime/159/'.strtr($key->Nombre, array(" " => "-")));
+                $dom = file_get_contents('http://animeflv.net/anime/159/'.$key->Nombre);
+                #$dom = file_get_contents('http://animeflv.net/anime/159/'.strtr($key->Nombre, array(" " => "-")));
                 preg_match(Regular::UltimoCapitulo(), $dom,$M);
                 print ";".$M[1];
                 if(preg_match(Regular::ProximoCapitulo(), $dom,$N)){
