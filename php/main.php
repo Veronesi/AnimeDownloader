@@ -2,13 +2,20 @@
 /**
  * PHP version 7
  * @author      @Fanaes.
- * @copyright   2017 Free SoftWare.
+ * @copyright   2017-2018 Free SoftWare.
  * @version     1.0.0
- * @link        https://github.com/Veronesi/Anime
+ * @link        https://github.com/Veronesi/AnimeDownloader
  * @since       12/01/2017
- * Guia de Uso: Colocar este archivo en la carpeta donde se descargaran los capitulos de anime (cada anime se va a descargar en una carpeta aparte). Por ej colocarlo en "C:\Users\MiNombre\anime". luego por cada anime que se quiera descargar se debera crear una carpeta con el respectivo nombre del anime. Por ej si se desea descargar los capitulos del anime one piece, la carpeta se llamara "one piece", colocda en la carepta anime (siguiendo el caso anterior). Como se que nombre tengo que ponerle a la carpeta? Bueno como por ahora solo descarga animes de la pagina animeflv.net, se debera buscar el anime y ver su link, Por ej: "animeflv.net/anime/4921/one-piece", por lo tanto sabemos que el nombre de la carpeta asera one piece (recordar quitar los "-" medios). Luego solo se debera correr el Script.
  */
 class Regular{
+        PUBLIC STATIC function ProximoCapitulo()
+        {
+            return "/Date\sfa\-calendar\">(\w+\-\w+\-\w+)<\/span>/";
+        }
+        PUBLIC STATIC function UltimoCapitulo()
+        {
+            return "/<a\shref=\"\/ver\/\w+\/(?:\w+|\-)*\-(\d+)\">/";
+        }
         PUBLIC STATIC function NumeroCapitulo()
         {
             /*
@@ -134,12 +141,38 @@ class Main{
         foreach ($this->Lista as $key) {
            preg_match("/(\d+)_\d+\.\w+/", $key->Capitulos[0],$M); 
            if($M[1] == $code){
+            print "<".$key->Nombre.">";
                 foreach ($key->Problemas as $key2) {
                     print $key2."|";
                 }
                 print $key->Ultimo;
            }
         }
+    }
+    PUBLIC function UltimoCapitulo($code){
+        foreach ($this->Lista as $key) {
+            preg_match("/(\d+)_\d+\.\w+/", $key->Capitulos[0],$M); 
+            if($M[1] == $code){
+                $dom = file_get_contents('http://animeflv.net/anime/159/'.strtr($key->Nombre, array(" " => "-")));
+                preg_match(Regular::UltimoCapitulo(), $dom,$M);
+                print ";".$M[1];
+                if(preg_match(Regular::ProximoCapitulo(), $dom,$N)){
+                    print ";".$N[1];
+                }else{
+                    print ";0";
+                }  
+            }
+        }
+        /*
+        $dom = file_get_contents('http://animeflv.net/anime/123/'.$code);
+        preg_match(Regular::UltimoCapitulo(), $dom,$M);
+        print ";".$M;
+        if(preg_match(Regular::ProximoCapitulo(), $dom,$N)){
+            print ";".$N;
+        }else{
+            print ";0";
+        }
+        */
     }
 }
 class Anime{
@@ -165,9 +198,15 @@ class Anime{
         sort($ListaCapitulos, SORT_NATURAL | SORT_FLAG_CASE);
         # Por defecto ponemos como q solo existe el capitulo 0.
         $Ultimo= "123_0.mp4";
+        $Contador=1;
         foreach($ListaCapitulos as $Capitulo){
             # Verificamos si el archivo obtenido es un mp4 [Por razones de compativilidad].
             if(strpos($Capitulo, ".mp4")){
+                $Numero = explode("_", $Capitulo);
+                while($Contador < $Numero[1]){
+                    array_push($this->Problemas, $Contador);
+                    $Contador++;
+                }
                 array_push($this->Capitulos, $Capitulo);
                 # Si pesa mas de 1MB sabemos que el el episodio se descargo bien, lo almacenamos asumiendo que es el ultimo capitulo que se descargo correctamente.
                 if(filesize($this->Direccion . $Capitulo) > 122880){
@@ -178,6 +217,7 @@ class Anime{
                         array_push($this->Problemas, $M[1]);
                     }                   
                 }
+                $Contador++;
             }
         }
         # Utilizamos un if en el caso de que haya un archivo extraño
@@ -272,7 +312,9 @@ switch ($_POST['funcion']) {
         $Anime->ListarAnimes();
         break;
     case 'listCap':
-        $Anime->ListarCapitulos($_POST['code']);
+        $code = $_POST['code'];
+        $Anime->ListarCapitulos($code);
+        $Anime->UltimoCapitulo($code);
         break;
     default:
         # code...
