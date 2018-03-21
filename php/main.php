@@ -141,7 +141,6 @@ class Main{
         foreach ($this->Lista as $key) {
            preg_match("/(\d+)_\d+\.\w+/", $key->Capitulos[0],$M); 
            if($M[1] == $code){
-            print "<".$key->Nombre.">";
                 foreach ($key->Problemas as $key2) {
                     print $key2."|";
                 }
@@ -160,7 +159,8 @@ class Main{
                     print ";".$N[1];
                 }else{
                     print ";0";
-                }  
+                }
+                print ";".$key->Nombre;
             }
         }
         /*
