@@ -95,6 +95,7 @@
 				<script type="text/javascript">
           Nombre="";
           code="";
+          Ultimo=0;
 			$( '#btn-change-option' ).click(function(){
 				url = $( '#form-change-url' ).val();
 				if(url[url.length-1] == "\\"){
@@ -110,6 +111,7 @@
 					// No hay ningun capitulo mal descargado.
 					parametros = data.split(';');
           Nombre = parametros[3];
+          Ultimo = parametros[1];
           $( '#tbody-capitulos' ).append('<tr><td  colspan="3">'+parametros[3]+'</td></tr>');
           if(parametros[2] == "0"){
             $( '#tbody-capitulos' ).append('<tr><td  colspan="3"><div class="alert alert-danger" role="alert">Serie Finalizada</td></tr>');
@@ -117,16 +119,17 @@
             $( '#tbody-capitulos' ).append('<tr><td  colspan="3"><div class="alert alert-success" role="alert">Proximo Episodio: '+parametros[2]+'</div></td></tr>');
           }
           while(parametros[1] > parametros[0] -1){
-            $( '#tbody-capitulos' ).append('<tr class="cap-celeste"><td>'+parametros[1]+'</td><td><button type="button" class="btn btn-success">Descargar</button></td><td><button type="button" class="btn btn-secondary">No visto</button></td></tr>');
+            $( '#tbody-capitulos' ).append('<tr class="cap-celeste"><td>'+parametros[1]+'</td><td><button type="button" class="btn btn-success">Descargar</button></td><td><button id="btn-vw'+i+'" onclick="Change_Btn('+i+')"  type="button" class="btn btn-secondary">No visto</button></td></tr>');
             parametros[1]--;
           }
           for(i=parametros[0] - 1;i>0;i--){
-            $( '#tbody-capitulos' ).append('<tr><td>'+i+'</td><td><button type="button" class="btn btn-primary" onclick="Ver_Capitulo('+i+')">Ver</button></td><td><button type="button" class="btn btn-secondary">No visto</button></td></tr>');
+            $( '#tbody-capitulos' ).append('<tr><td>'+i+'</td><td><button type="button" class="btn btn-primary" onclick="Ver_Capitulo('+i+')">Ver</button></td><td><button id="btn-vw'+i+'" onclick="Change_Btn('+i+')"  type="button" class="btn btn-secondary">No visto</button></td></tr>');
           }
 				}else{
           er = parametros[parametros.length-1];
           er = er.split(';');
           Nombre = er[3];
+          Ultimo = er[1];
           $( '#tbody-capitulos' ).append('<tr><td  colspan="3"><div class="alert alert-primary" role="alert">'+er[3]+'</div></td></tr>');
           if(er[2] == "0"){
             $( '#tbody-capitulos' ).append('<tr><td  colspan="3"><div class="alert alert-danger" role="alert">Serie Finalizada</td></tr>');
@@ -135,20 +138,43 @@
             $( '#tbody-capitulos' ).append('<tr><td  colspan="3"><div class="alert alert-success" role="alert">Proximo Episodio: '+er[2]+'</div></td></tr>');
           }
           for(i=er[1]-1;i>=er[0];i--){
-            $( '#tbody-capitulos' ).append('<tr class="cap-celeste"><td>'+i+'</td><td><button type="button" class="btn btn-success">Descargar</button></td><td><button type="button" class="btn btn-secondary">No visto</button></td></tr>');
+            $( '#tbody-capitulos' ).append('<tr class="cap-celeste"><td>'+i+'</td><td><button type="button" class="btn btn-success">Descargar</button></td><td><button id="btn-vw'+i+'" onclick="Change_Btn('+i+')"  type="button" class="btn btn-secondary">No visto</button></td></tr>');
           }
           for(i=er[0]-1;i>0;i--){
             if((parametros.slice(0, parametros.length -1)).indexOf(i.toString()) == "-1"){
-              $( '#tbody-capitulos' ).append('<tr><td>'+i+'</td><td><button type="button" class="btn btn-primary"  onclick="Ver_Capitulo('+i+')">Ver</button></td><td><button type="button" class="btn btn-secondary">No visto</button></td></tr>');
+              $( '#tbody-capitulos' ).append('<tr><td>'+i+'</td><td><button type="button" class="btn btn-primary"  onclick="Ver_Capitulo('+i+')">Ver</button></td><td><button type="button" id="btn-vw'+i+'" onclick="Change_Btn('+i+')"   class="btn btn-secondary">No visto</button></td></tr>');
             }else{
-              $( '#tbody-capitulos' ).append('<tr class="cap-celeste"><td>'+i+'</td><td><button type="button" class="btn btn-success">Descargar</button></td><td><button type="button" class="btn btn-secondary">No visto</button></td></tr>')
+              $( '#tbody-capitulos' ).append('<tr class="cap-celeste"><td>'+i+'</td><td><button type="button" class="btn btn-success">Descargar</button></td><td><button id="btn-vw'+i+'" onclick="Change_Btn('+i+')" type="button" class="btn btn-secondary">No visto</button></td></tr>')
             }
           }
         }
-			});
+	      for(i=1;i<=Ultimo;i++){
+      	if(localStorage[code+'_'+i] == 'true'){
+      		$('#btn-vw'+i).removeClass("btn-secondary");
+      		$('#btn-vw'+i).addClass("btn-primary");
+      		$('#btn-vw'+i).text('Visto');
+      	}
+      }
+	});
       function Ver_Capitulo(num){
+      	localStorage[code+'_'+num] = 'true';
         link = (localStorage.url).replace('\\','/')+'/'+Nombre+'/'+code+'_'+num+'.mp4';     
         location.href = "view.php?link="+link+"&code="+code;
       }
-			</script>
+      function Change_Btn(num){
+      	$( '#btn-vw'+num ).each(function (){
+      		if($(this).attr('class') == "btn btn-secondary"){
+      			$(this).removeClass("btn-secondary");
+      			$(this).addClass("btn-primary");
+      			$(this).text('Visto');
+      			localStorage[code+'_'+num] = 'true';
+      		}else{
+      			$(this).removeClass("btn-primary");
+      			$(this).addClass("btn-secondary");
+      			$(this).text('No visto');
+      			localStorage[code+'_'+num] = 'false';
+      		}
+      	});
+      }
+</script>
 </html>

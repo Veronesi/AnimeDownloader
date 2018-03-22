@@ -91,7 +91,7 @@
 				<script src="/js/jquery-ui/jquery-ui.js"></script>
 				<script src="/js/bootstrap/bootstrap.min.js" type="text/javascript"></script>
 				<script type="text/javascript">
-					if(localStorage.length == 0){
+					if(!localStorage.url){
 						localStorage.url = "C:\\Downloads\\Anime";
 					}
 						ani_update_folders();
@@ -136,5 +136,5 @@
       $( '#btn-download' ).click(function(){
         location.href = '/view.php';
       });
-			 	</script>
+</script>
 </html>
