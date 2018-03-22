@@ -36,7 +36,8 @@
 		</form>
 		</div>
 </nav>
-	<div class="container">
+	<div id="container-capitulos" class="container">
+		<div id="container-capitulos2"></div>
 		<table class="table" style="text-align: center;">
 			<tbody id="tbody-capitulos">
 		    
@@ -114,9 +115,9 @@
           Ultimo = parametros[1];
           $( '#tbody-capitulos' ).append('<tr><td  colspan="3">'+parametros[3]+'</td></tr>');
           if(parametros[2] == "0"){
-            $( '#tbody-capitulos' ).append('<tr><td  colspan="3"><div class="alert alert-danger" role="alert">Serie Finalizada</td></tr>');
+            $( '#container-capitulos2' ).append('<div class="alert alert-danger" role="alert" style="text-align:center">Serie Finalizada</div>');
           }else{
-            $( '#tbody-capitulos' ).append('<tr><td  colspan="3"><div class="alert alert-success" role="alert">Proximo Episodio: '+parametros[2]+'</div></td></tr>');
+            $( '#container-capitulos2' ).append('<div class="alert alert-success" role="alert" style="text-align:center">Proximo Episodio: '+parametros[2]+'</div>');
           }
           while(parametros[1] > parametros[0] -1){
             $( '#tbody-capitulos' ).append('<tr class="cap-celeste"><td>'+parametros[1]+'</td><td><button type="button" class="btn btn-success">Descargar</button></td><td><button id="btn-vw'+i+'" onclick="Change_Btn('+i+')"  type="button" class="btn btn-secondary">No visto</button></td></tr>');
@@ -130,12 +131,12 @@
           er = er.split(';');
           Nombre = er[3];
           Ultimo = er[1];
-          $( '#tbody-capitulos' ).append('<tr><td  colspan="3"><div class="alert alert-primary" role="alert">'+er[3]+'</div></td></tr>');
+          $( '#container-capitulos2' ).append('<div class="alert alert-primary" role="alert" style="text-align:center">'+er[3]+'</div>');
           if(er[2] == "0"){
-            $( '#tbody-capitulos' ).append('<tr><td  colspan="3"><div class="alert alert-danger" role="alert">Serie Finalizada</td></tr>');
+            $( '#container-capitulos2' ).append('<div class="alert alert-danger" role="alert" style="text-align:center">Serie Finalizada</div>');
           }else{
 
-            $( '#tbody-capitulos' ).append('<tr><td  colspan="3"><div class="alert alert-success" role="alert">Proximo Episodio: '+er[2]+'</div></td></tr>');
+            $( '#container-capitulos2' ).append('<div class="alert alert-success" role="alert" style="text-align:center">Proximo Episodio: '+er[2]+'</div>');
           }
           for(i=er[1]-1;i>=er[0];i--){
             $( '#tbody-capitulos' ).append('<tr class="cap-celeste"><td>'+i+'</td><td><button type="button" class="btn btn-success">Descargar</button></td><td><button id="btn-vw'+i+'" onclick="Change_Btn('+i+')"  type="button" class="btn btn-secondary">No visto</button></td></tr>');
