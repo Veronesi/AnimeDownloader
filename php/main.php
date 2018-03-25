@@ -317,6 +317,11 @@ switch ($_POST['funcion']) {
         $Anime->ListarCapitulos($code);
         $Anime->UltimoCapitulo($code);
         break;
+    case 'download':
+        $capitulo = $_POST['capitulo'];
+        $code = $_POST['code']; 
+        $tmp = $_POST['tmp'];
+        break;
     default:
         # code...
         break;
