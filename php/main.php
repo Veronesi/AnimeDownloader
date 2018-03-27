@@ -175,6 +175,13 @@ class Main{
         }
         */
     }
+    PUBLIC function BuscarAnime($code){
+        foreach ($this->Lista as $key) {
+            if($key->getCode() == $code){
+                return $key;
+            }
+        }
+    }
 }
 class Anime{
     PRIVATE $Main;
@@ -227,10 +234,8 @@ class Anime{
             $this->Ultimo = $M[1] +1;
         }
     }
-    PUBLIC function Descargar($Capitulo){
+    PUBLIC function Descargar($Capitulo, $tmp = 0){
         # Nos fijamos si existe ese capitulo.
-        # Usamos 159 ya que es indistinto el numero de carpeta.
-        # Usamos @ ya que cuando lleguemos al capitulo que no existe nos va a tirar un E_WARNING.
         if(preg_match(Regular::LinkZippyshare(), @file_get_contents("http://animeflv.net/ver/159/" . strtr($this->Nombre, array(" " => "-")) . "-" . $Capitulo), $M)){
             # Nos fijamos si el link esta roto.
             $DOM_zippyshare = @file_get_contents("http://" . strtr($M[1], array("%2F" => "/")));
@@ -303,6 +308,14 @@ class Anime{
         }
         return true;
     }
+    PUBLIC function getCode(){
+        preg_match("/(\d+)_\d+\.\w+/", $this->Capitulos[0],$M);
+        return $M[1]; 
+    }
+    PUBLIC function testDownload($Capitulo, $tmp = 0){
+        pclose(popen("start /B php -f D:/download.php 2>nul >nul", "r"));
+        print "listo";
+    }
 }
 $url = $_POST['url'];
 $Anime = new Main();
@@ -321,6 +334,7 @@ switch ($_POST['funcion']) {
         $capitulo = $_POST['capitulo'];
         $code = $_POST['code']; 
         $tmp = $_POST['tmp'];
+        ($Anime->BuscarAnime($code))->testDownload($Capitulo,$tmp);
         break;
     default:
         # code...
